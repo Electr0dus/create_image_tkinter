@@ -40,6 +40,10 @@ class DrawingApp:
         color_button = tk.Button(control_frame, text="Выбрать цвет", command=self.choose_color)
         color_button.pack(side=tk.LEFT)
 
+        # Создание кнопки ластика
+        eraser_button = tk.Button(control_frame, text="Ластик", command=self.erase_canvas)
+        eraser_button.pack(side=tk.LEFT)
+
         save_button = tk.Button(control_frame, text="Сохранить", command=self.save_image)
         save_button.pack(side=tk.LEFT)
 
@@ -52,6 +56,13 @@ class DrawingApp:
         size_list_brushes = tk.OptionMenu(control_frame, variable, *self.__sizes,
                                           command=self.callback_option_menu)
         size_list_brushes.pack(side=tk.LEFT)
+
+    def erase_canvas(self):
+        '''
+        Функция применяется для установки цвета фона для реализации ластика
+        :return:
+        '''
+        self.pen_color = 'white'
 
     def callback_option_menu(self, parametr):
         '''
