@@ -51,11 +51,24 @@ class DrawingApp:
                                          command=self.callback_scale)
         self.brush_size_scale.pack(side=tk.LEFT)
 
+        # Пипетка палитры правая кнопка мыши для захвата цвета
+        self.canvas.bind('<Button-3>', self.pick_color)
+
         variable = tk.StringVar(self.root)
         variable.set('Размер кисти')
         size_list_brushes = tk.OptionMenu(control_frame, variable, *self.__sizes,
                                           command=self.callback_option_menu)
         size_list_brushes.pack(side=tk.LEFT)
+
+        # Функция для изменения цвета пипеткой
+
+    def pick_color(self, event):
+        '''
+        Устанавливает цвет из пипетки при нажатии на правую кнопку мыши
+        :param event:
+        :return:
+        '''
+        self.pen_color = "#%02x%02x%02x" % self.image.getpixel((event.x, event.y))
 
     def erase_canvas(self):
         '''
