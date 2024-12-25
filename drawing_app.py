@@ -54,6 +54,12 @@ class DrawingApp:
         # Пипетка палитры правая кнопка мыши для захвата цвета
         self.canvas.bind('<Button-3>', self.pick_color)
 
+        # Горячие клавиши
+        # Клавиша сохранения изображения
+        self.root.bind("<Control-s>", self.save_image)
+        # Клавиша выбора цвета рисования
+        self.root.bind("<Control-c>", self.choose_color)
+
         variable = tk.StringVar(self.root)
         variable.set('Размер кисти')
         size_list_brushes = tk.OptionMenu(control_frame, variable, *self.__sizes,
@@ -128,14 +134,14 @@ class DrawingApp:
         self.image = Image.new("RGB", (600, 400), "white")
         self.draw = ImageDraw.Draw(self.image)
 
-    def choose_color(self):
+    def choose_color(self, event):
         '''
         Открывает стандартное диалоговое окно выбора цвета и устанавливает выбранный цвет как текущий для кисти.
         :return:
         '''
         self.pen_color = colorchooser.askcolor(color=self.pen_color)[1]
 
-    def save_image(self):
+    def save_image(self, event):
         '''
         Позволяет пользователю сохранить изображение, используя стандартное диалоговое окно для сохранения файла.
         Поддерживает только формат PNG. В случае успешного сохранения выводится сообщение об успешном сохранении.
