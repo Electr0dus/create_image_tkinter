@@ -23,6 +23,10 @@ class DrawingApp:
         self.last_x, self.last_y = None, None
         self.pen_color = 'black'
 
+        # Небольшое окно для отображения текущего цвета кисти
+        self.color_label = tk.Label(self.root, background=self.pen_color, height=2, width=5, relief=tk.SOLID, borderwidth=2)
+        self.color_label.pack(fill=tk.X)
+
         self.canvas.bind('<B1-Motion>', self.paint)
         self.canvas.bind('<ButtonRelease-1>', self.reset)
 
@@ -39,6 +43,9 @@ class DrawingApp:
 
         color_button = tk.Button(control_frame, text="Выбрать цвет", command=self.choose_color)
         color_button.pack(side=tk.LEFT)
+
+
+
 
         # Создание кнопки ластика
         eraser_button = tk.Button(control_frame, text="Ластик", command=self.erase_canvas)
@@ -75,6 +82,7 @@ class DrawingApp:
         :return:
         '''
         self.pen_color = "#%02x%02x%02x" % self.image.getpixel((event.x, event.y))
+        self.color_label.configure(background=self.pen_color)
 
     def erase_canvas(self):
         '''
@@ -134,12 +142,13 @@ class DrawingApp:
         self.image = Image.new("RGB", (600, 400), "white")
         self.draw = ImageDraw.Draw(self.image)
 
-    def choose_color(self, event):
+    def choose_color(self):
         '''
         Открывает стандартное диалоговое окно выбора цвета и устанавливает выбранный цвет как текущий для кисти.
         :return:
         '''
         self.pen_color = colorchooser.askcolor(color=self.pen_color)[1]
+        self.color_label.configure(background=self.pen_color)
 
     def save_image(self, event):
         '''
