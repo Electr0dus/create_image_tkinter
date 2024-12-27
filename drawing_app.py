@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import colorchooser, filedialog, messagebox
+from tkinter import colorchooser, filedialog, messagebox, simpledialog
 
 from PIL import Image, ImageDraw
 
@@ -8,14 +8,14 @@ class DrawingApp:
     __sizes = [1, 2, 5, 10]  # Список предопределённых размеров кисти
     __size_brush = 0  # Задаёт размер линии для рисования
 
-    def __init__(self, root):
+    def __init__(self, root, wid=600, hei=400):
         self.root = root
         self.root.title("Рисовалка с сохранением в PNG")
 
-        self.image = Image.new("RGB", (600, 400), "white")
+        self.image = Image.new("RGB", (wid, hei), "white")
         self.draw = ImageDraw.Draw(self.image)
 
-        self.canvas = tk.Canvas(root, width=600, height=400, bg='white')
+        self.canvas = tk.Canvas(root, width=wid, height=hei, bg='white')
         self.canvas.pack()
 
         self.setup_ui()
@@ -24,7 +24,8 @@ class DrawingApp:
         self.pen_color = 'black'
 
         # Небольшое окно для отображения текущего цвета кисти
-        self.color_label = tk.Label(self.root, background=self.pen_color, height=2, width=5, relief=tk.SOLID, borderwidth=2)
+        self.color_label = tk.Label(self.root, background=self.pen_color, height=2, width=5, relief=tk.SOLID,
+                                    borderwidth=2)
         self.color_label.pack(fill=tk.X)
 
         self.canvas.bind('<B1-Motion>', self.paint)
@@ -44,15 +45,16 @@ class DrawingApp:
         color_button = tk.Button(control_frame, text="Выбрать цвет", command=self.choose_color)
         color_button.pack(side=tk.LEFT)
 
-
-
-
         # Создание кнопки ластика
         eraser_button = tk.Button(control_frame, text="Ластик", command=self.erase_canvas)
         eraser_button.pack(side=tk.LEFT)
 
         save_button = tk.Button(control_frame, text="Сохранить", command=self.save_image)
         save_button.pack(side=tk.LEFT)
+
+        # Кнопка для задания размера холста
+        size_holst_button = tk.Button(control_frame, text='Размер холста', command=self.size_holst)
+        size_holst_button.pack(side=tk.LEFT)
 
         self.brush_size_scale = tk.Scale(control_frame, from_=1, to=10, orient=tk.HORIZONTAL,
                                          command=self.callback_scale)
@@ -73,7 +75,20 @@ class DrawingApp:
                                           command=self.callback_option_menu)
         size_list_brushes.pack(side=tk.LEFT)
 
-        # Функция для изменения цвета пипеткой
+    def size_holst(self):
+        """
+        Задать размер холста
+        :param event:
+        :return:
+        """
+        wid = tk.simpledialog.askinteger(title='Размер нового окна',
+                                         prompt='Введите ширину окна:')
+        height = tk.simpledialog.askinteger(title='Размер нового окна',
+                                            prompt='Введите длину окна:')
+        self.image = Image.new("RGB", (wid, height), "white")
+        root = tk.Tk()
+        app = DrawingApp(root, wid=wid, hei=height)
+        root.mainloop()
 
     def pick_color(self, event):
         '''
